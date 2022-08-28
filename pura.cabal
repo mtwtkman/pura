@@ -1,0 +1,37 @@
+cabal-version:      3.6
+name:               pura
+version:            0.1.0.0
+author:             mtwtkman
+maintainer:         924277+mtwtkman@users.noreply.github.com
+
+library
+    hs-source-dirs:   lib
+    default-language: Haskell2010
+    build-depends:    base
+                    , yaml
+                    , containers
+                    , text
+                    , bytestring
+    exposed-modules:  Pura.Build
+                    , Pura.Parse
+
+executable pura
+    main-is:          Main.hs
+    build-depends:    base
+                    , yaml
+                    , optparse-applicative
+                    , pura
+    hs-source-dirs:   app
+    default-language: Haskell2010
+
+test-suite test
+    main-is:          Test.hs
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   test
+    default-language: Haskell2010
+    build-depends:    base
+                    , QuickCheck
+                    , tasty
+                    , tasty-quickcheck
+                    , pura
+    other-modules:  BuildTest

@@ -1,0 +1,13 @@
+packages:
+  - ghc
+  - cabal-install
+  - haskell-language-server
+shellAliases:
+  b: "cabal build"
+  c: "cabal clean"
+  r: "cabal run"
+  repl: "cabal repl"
+shellHooks: |-
+  function hi() {
+    echo "hi"
+  }
