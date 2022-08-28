@@ -71,5 +71,5 @@ mkShell {
   ];
   shellHooks = ''
   '';
-};
+}
 ```
