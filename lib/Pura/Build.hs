@@ -66,7 +66,7 @@ buildNixShell p a h =
       indent 2 "];",
       indent 2 "shellHooks = ''",
       concatLine (map (indent 4 . show) $ getAliases a),
-      unlines [indent 4 x | x <- lines h],
+      concatLine (map (indent 4) $ lines h),
       indent 2 "'';",
       "}"
     ]
