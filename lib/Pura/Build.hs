@@ -13,12 +13,12 @@ module Pura.Build
   )
 where
 
-import Data.Maybe
-import qualified Data.Map as M
+import Control.Applicative
 import Data.List (intercalate)
+import qualified Data.Map as M
+import Data.Maybe
 import Data.Semigroup ((<>))
 import Pura.Parse
-import Control.Applicative
 
 indent :: Int -> String -> String
 indent i = (++) (intercalate "" $ replicate i " ")
@@ -73,8 +73,7 @@ buildNixShell p a h =
 
 buildFromConfig :: Config -> String
 buildFromConfig c =
-  let
-    p = maybe defaultPackages Packages (packages c)
-    a = maybe defaultAliases aliasesFromMap (shellAliases c)
-    h = fromMaybe defaultShellHooks (shellHooks c)
-  in buildNixShell p a h
+  let p = maybe defaultPackages Packages (packages c)
+      a = maybe defaultAliases aliasesFromMap (shellAliases c)
+      h = fromMaybe defaultShellHooks (shellHooks c)
+   in buildNixShell p a h

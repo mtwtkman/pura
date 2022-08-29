@@ -1,8 +1,8 @@
 module Main where
 
+import qualified BuildTest
 import Test.Tasty
 import Test.Tasty.QuickCheck as QC
-import qualified BuildTest
 
 main = defaultMain tests
 

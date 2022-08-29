@@ -12,4 +12,3 @@ main = do
   case content of
     Just config -> write "./example/hoge.shell.nix" config
     Nothing -> print "cannot load"
-
