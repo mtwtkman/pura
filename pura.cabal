@@ -18,9 +18,9 @@ library
 executable pura
     main-is:          Main.hs
     build-depends:    base
-                    , yaml
                     , optparse-applicative
                     , pura
+                    , filepath
     hs-source-dirs:   app
     default-language: Haskell2010
 
