@@ -10,7 +10,7 @@ where
 import Control.Applicative
 import qualified Data.ByteString as B
 import qualified Data.Map as M
-import Data.Yaml (FromJSON (..), (.:), (.:?), ToJSON(..), object, (.=))
+import Data.Yaml (FromJSON (..), ToJSON (..), object, (.:), (.:?), (.=))
 import qualified Data.Yaml as Y
 
 data Config = Config

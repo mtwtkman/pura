@@ -1,47 +1,54 @@
 module Main where
 
-import Data.List
 import Control.Monad
-import System.Directory
+import Data.List
+import Options.Applicative
 import Pura.Build
 import Pura.Parse
+import System.Directory
 import System.FilePath (joinPath, (<.>))
-import Options.Applicative
 
 type TemplateRoot = String
+
 type TemplateName = String
 
 write :: FilePath -> Config -> IO ()
 write p c = writeFile p (buildFromConfig c)
 
 data PuraCommand = TemplateSpecified
-                    { getTemplateRoot :: TemplateRoot
-                    , getTemplateName :: TemplateName
-                    }
-                 deriving (Show)
+  { getTemplateRoot :: TemplateRoot,
+    getTemplateName :: TemplateName
+  }
+  deriving (Show)
 
-buildTemplatePath :: PuraCommand  -> FilePath
-buildTemplatePath (TemplateSpecified r n) = joinPath [r,n]
+buildTemplatePath :: PuraCommand -> FilePath
+buildTemplatePath (TemplateSpecified r n) = joinPath [r, n]
 
 defaultTemplateRoot :: FilePath
 defaultTemplateRoot = "~/.config/pura"
 
 puraCommand :: Parser PuraCommand
-puraCommand = TemplateSpecified
-  <$> option str ( long "template-root"
-             <> short 'r'
-             <> value defaultTemplateRoot
-             <> metavar "TEMPLATE_ROOT_DIR_NAME"
-             )
-  <*> argument str (metavar "TEMPLATE_NAME")
+puraCommand =
+  TemplateSpecified
+    <$> option
+      str
+      ( long "template-root"
+          <> short 'r'
+          <> value defaultTemplateRoot
+          <> metavar "TEMPLATE_ROOT_DIR_NAME"
+      )
+    <*> argument str (metavar "TEMPLATE_NAME")
 
 parsePuraCommand :: IO PuraCommand
 parsePuraCommand = execParser opts
   where
-    opts = info (puraCommand <**> helper)
-      ( fullDesc
-        <> progDesc "shell.nix generator"
-        <> header "Pura - helps you generating shell.nix with template system" )
+    opts =
+      info
+        (puraCommand <**> helper)
+        ( fullDesc
+            <> progDesc "shell.nix generator"
+            <> header "Pura - helps you generating shell.nix with template system"
+        )
 
 matchedTemplateFile :: [FilePath] -> IO [FilePath]
 matchedTemplateFile = filterM doesPathExist
