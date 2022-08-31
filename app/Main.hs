@@ -1,35 +1,39 @@
 module Main where
 
+import Data.List
+import Control.Monad
+import System.Directory
 import Pura.Build
 import Pura.Parse
 import System.FilePath (joinPath, (<.>))
 import Options.Applicative
 
 type TemplateRoot = String
+type TemplateName = String
 
 write :: FilePath -> Config -> IO ()
 write p c = writeFile p (buildFromConfig c)
 
 data PuraCommand = TemplateSpecified
-                    { getTemplateName :: String
-                    , getTemplateRoot :: String
+                    { getTemplateRoot :: TemplateRoot
+                    , getTemplateName :: TemplateName
                     }
                  deriving (Show)
 
-buildTemplatePath :: TemplateRoot -> PuraCommand -> FilePath
-buildTemplatePath t (TemplateSpecified n _) = joinPath [t,n]
+buildTemplatePath :: PuraCommand  -> FilePath
+buildTemplatePath (TemplateSpecified r n) = joinPath [r,n]
 
 defaultTemplateRoot :: FilePath
 defaultTemplateRoot = "~/.config/pura"
 
 puraCommand :: Parser PuraCommand
 puraCommand = TemplateSpecified
-  <$> argument str (metavar "TEMPLATE_NAME")
-  <*> option str ( long "template-root"
+  <$> option str ( long "template-root"
              <> short 'r'
              <> value defaultTemplateRoot
              <> metavar "TEMPLATE_ROOT_DIR_NAME"
              )
+  <*> argument str (metavar "TEMPLATE_NAME")
 
 parsePuraCommand :: IO PuraCommand
 parsePuraCommand = execParser opts
@@ -39,17 +43,25 @@ parsePuraCommand = execParser opts
         <> progDesc "shell.nix generator"
         <> header "Pura - helps you generating shell.nix with template system" )
 
+matchedTemplateFile :: [FilePath] -> IO [FilePath]
+matchedTemplateFile = filterM doesPathExist
+
+outputName :: String
+outputName = "shell.nix.temp"
+
 main :: IO ()
 main = do
   parsed <- parsePuraCommand
-  let templateRoot = getTemplateRoot parsed
-      templatePath = buildTemplatePath templateRoot parsed
+  let templatePath = buildTemplatePath parsed
       templatePathCandidates = map (templatePath <.>) ["yaml", "yml"]
-  content <- attemptLoad templatePathCandidates
-  print content
-  where
-    attemptLoad (x:xs) = do
+  matchedFiles <- matchedTemplateFile templatePathCandidates
+  case matchedFiles of
+    [] -> fail "Template file not found"
+    [x] -> do
       content <- load x
       case content of
-        Just _ -> return content
-        Nothing -> attemptLoad xs
+        Just def -> write outputName def
+        Nothing -> fail "Cannot parse"
+    xs -> fail $ multipleTemplateNameErroMsg xs
+  where
+    multipleTemplateNameErroMsg xs = "Cannot unique template name. (" ++ intercalate "," xs ++ ")"
