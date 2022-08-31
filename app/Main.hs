@@ -47,7 +47,7 @@ matchedTemplateFile :: [FilePath] -> IO [FilePath]
 matchedTemplateFile = filterM doesPathExist
 
 outputName :: String
-outputName = "shell.nix.temp"
+outputName = "shell.nix"
 
 main :: IO ()
 main = do
