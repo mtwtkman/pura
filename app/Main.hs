@@ -7,6 +7,7 @@ import Pura.Build
 import Pura.Parse
 import System.Directory
 import System.FilePath (joinPath, (<.>))
+import System.Posix.User
 
 type TemplateRoot = String
 
@@ -51,10 +52,21 @@ parsePuraCommand = execParser opts
         )
 
 matchedTemplateFile :: [FilePath] -> IO [FilePath]
-matchedTemplateFile = filterM doesPathExist
+matchedTemplateFile xs = do
+  paths <- mapM expandHomeDir xs
+  filterM doesPathExist paths
 
 outputName :: String
 outputName = "shell.nix"
+
+startsWithTilde :: String -> Bool
+startsWithTilde s = head s == '~'
+
+expandHomeDir :: FilePath -> IO FilePath
+expandHomeDir ('~' : xs) = do
+  x <- getHomeDirectory
+  return $ x ++ xs
+expandHomeDir s = return s
 
 main :: IO ()
 main = do
@@ -62,6 +74,7 @@ main = do
   let templatePath = buildTemplatePath parsed
       templatePathCandidates = map (templatePath <.>) ["yaml", "yml"]
   matchedFiles <- matchedTemplateFile templatePathCandidates
+  print matchedFiles
   case matchedFiles of
     [] -> fail "Template file not found"
     [x] -> do
