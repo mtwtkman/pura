@@ -2,7 +2,7 @@
 `shell.nix` generator.
 
 
-If you have the file named `hs.yaml` like below,
+If you have the file named `hs.yaml` (or `hs.yml`) like below,
 
 ```yaml
 packages:
@@ -53,20 +53,6 @@ mkShell {
 1. Done
 
 Pura supposes the location of template files is `~/.config/pura` but you can specify it your choice by using `--template-root` option.
-
-If you wanted to generate a empty `shell.nix` anyway, execute `pura --skelton` makes a your wish.
-
-`pura --skelton` generates like below
-
-```nix
-with import <nixpkgs> {};
-mkShell {
-  pacakges = [
-  ];
-  shellHooks = ''
-  '';
-}
-```
 
 
 # Template file format

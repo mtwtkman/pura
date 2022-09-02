@@ -84,4 +84,4 @@ main = do
         Nothing -> fail "Cannot parse"
     xs -> fail $ multipleTemplateNameErroMsg xs
   where
-    multipleTemplateNameErroMsg xs = "Cannot unique template name. (" ++ intercalate "," xs ++ ")"
+    multipleTemplateNameErroMsg xs = "Found same named template files. (" ++ intercalate "," xs ++ ")"
