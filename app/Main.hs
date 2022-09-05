@@ -74,7 +74,6 @@ main = do
   let templatePath = buildTemplatePath parsed
       templatePathCandidates = map (templatePath <.>) ["yaml", "yml"]
   matchedFiles <- matchedTemplateFile templatePathCandidates
-  print matchedFiles
   case matchedFiles of
     [] -> fail "Template file not found"
     [x] -> do
