@@ -26,7 +26,7 @@ instance FromJSON Config where
       <$> v .: "packages"
       <*> v .: "shellAliases"
       <*> v .: "shellHooks"
-  parseJSON _ = fail "Expected Object fo Config value"
+  parseJSON _ = fail "Expected Object of Config value"
 
 parse :: B.ByteString -> Maybe Config
 parse = Y.decodeThrow
