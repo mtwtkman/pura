@@ -14,7 +14,7 @@ shellAliases:
   c: "cabal clean"
   r: "cabal run"
   repl: "cabal repl"
-shellHooks: |
+shellHook: |
   function hi() {
     echo "hi"
   }
@@ -34,7 +34,7 @@ mkShell {
     cabal-install
     haskell-language-server
   ];
-  shellHooks = ''
+  shellHook = ''
     alias b="cabal build"
     alias c="cabal clean"
     alias r="cabal run"
@@ -61,6 +61,6 @@ Pura supposes the location of template files is `~/.config/pura` but you can spe
 | ---  | ---- | -------
 | packages | Array<String> | [] |
 | shellAliases | Array<KeyValue<Name,Value>> | [] |
-| shellHooks | String | "" |
+| shellHook | String | "" |
 
-`shellAliases` are merged with `shellHooks` as shell aliases.
+`shellAliases` are merged with `shellHook` as shell aliases.

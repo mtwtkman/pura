@@ -1,4 +1,4 @@
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 mkShell {
   packages = [
     ghc
@@ -6,7 +6,7 @@ mkShell {
     haskell-language-server
     haskellPackages.ormolu
   ];
-  shellHooks = ''
+  shellHook = ''
     alias run="cabal run pura --"
     alias b="cabal build"
     alias t="cabal test"

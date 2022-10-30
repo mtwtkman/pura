@@ -3,10 +3,10 @@ module Pura.Build
     Packages (..),
     Aliases (..),
     Alias (..),
-    ShellHooks,
+    ShellHook,
     defaultPackages,
     defaultAliases,
-    defaultShellHooks,
+    defaultShellHook,
     indent,
     concatLine,
     buildFromConfig,
@@ -51,12 +51,12 @@ aliasesFromMap m = Aliases (M.foldlWithKey (\acc k v -> acc ++ [Alias k v]) [] m
 defaultAliases :: Aliases
 defaultAliases = Aliases []
 
-type ShellHooks = String
+type ShellHook = String
 
-defaultShellHooks :: ShellHooks
-defaultShellHooks = ""
+defaultShellHook :: ShellHook
+defaultShellHook = ""
 
-buildNixShell :: Packages -> Aliases -> ShellHooks -> String
+buildNixShell :: Packages -> Aliases -> ShellHook -> String
 buildNixShell p a h =
   unlines
     [ "with import <nixpkgs> {};",
@@ -64,7 +64,7 @@ buildNixShell p a h =
       indent 2 "packages = [",
       concatLine (map (indent 4) $ getPackages p),
       indent 2 "];",
-      indent 2 "shellHooks = ''",
+      indent 2 "shellHook = ''",
       concatLine (map (indent 4 . show) $ getAliases a),
       concatLine (map (indent 4) $ lines h),
       indent 2 "'';",
@@ -75,5 +75,5 @@ buildFromConfig :: Config -> String
 buildFromConfig c =
   let p = maybe defaultPackages Packages (packages c)
       a = maybe defaultAliases aliasesFromMap (shellAliases c)
-      h = fromMaybe defaultShellHooks (shellHooks c)
+      h = fromMaybe defaultShellHook (shellHook c)
    in buildNixShell p a h

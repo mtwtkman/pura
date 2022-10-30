@@ -16,7 +16,7 @@ import qualified Data.Yaml as Y
 data Config = Config
   { packages :: Maybe [String],
     shellAliases :: Maybe (M.Map String String),
-    shellHooks :: Maybe String
+    shellHook :: Maybe String
   }
   deriving (Eq, Show)
 
@@ -25,7 +25,7 @@ instance FromJSON Config where
     Config
       <$> v .: "packages"
       <*> v .: "shellAliases"
-      <*> v .: "shellHooks"
+      <*> v .: "shellHook"
   parseJSON _ = fail "Expected Object of Config value"
 
 parse :: B.ByteString -> Maybe Config
