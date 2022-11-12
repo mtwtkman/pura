@@ -5,6 +5,7 @@ mkShell {
     cabal-install
     haskell-language-server
     haskellPackages.ormolu
+    haskellPackages.cabal2nix
   ];
   shellHook = ''
     alias run="cabal run pura --"
@@ -15,6 +16,7 @@ mkShell {
       mkdir bin
       cabal install --installdir ./bin exe:pura
     }
+    alias release="cabal2nix . > pura.nix && nix-build"
   '';
 }
 
