@@ -10,14 +10,17 @@ module Pura.Build
     indent,
     concatLine,
     buildFromConfig,
+    buildSkeltonTemplate
   )
 where
 
+import qualified Data.ByteString as B
 import Control.Applicative
 import Data.List (intercalate)
 import qualified Data.Map as M
 import Data.Maybe
 import Data.Semigroup ((<>))
+import Data.Yaml (encode)
 import Pura.Parse
 
 indent :: Int -> String -> String
@@ -77,3 +80,6 @@ buildFromConfig c =
       a = maybe defaultAliases aliasesFromMap (shellAliases c)
       h = fromMaybe defaultShellHook (shellHook c)
    in buildNixShell p a h
+
+buildSkeltonTemplate :: B.ByteString
+buildSkeltonTemplate = encode skeltonConfig
