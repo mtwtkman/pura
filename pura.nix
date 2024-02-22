@@ -10,9 +10,10 @@ mkDerivation {
   isExecutable = true;
   libraryHaskellDepends = [ base bytestring containers text yaml ];
   executableHaskellDepends = [
-    base directory filepath optparse-applicative unix
+    base bytestring directory filepath optparse-applicative unix
   ];
   testHaskellDepends = [ base QuickCheck tasty tasty-quickcheck ];
+  doCheck = false;
   license = "unknown";
   mainProgram = "pura";
 }

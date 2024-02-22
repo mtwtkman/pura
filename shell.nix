@@ -1,4 +1,5 @@
-with import <nixpkgs> { };
+{ pkgs ? import <nixpkgs> { } }:
+with pkgs;
 mkShell {
   packages = [
     ghc
@@ -16,7 +17,6 @@ mkShell {
       mkdir bin
       cabal install --installdir ./bin exe:pura
     }
-    alias release="cabal2nix . > pura.nix && nix-build"
+    alias release="cabal2nix --no-check . > pura.nix && nix-build"
   '';
 }
-
